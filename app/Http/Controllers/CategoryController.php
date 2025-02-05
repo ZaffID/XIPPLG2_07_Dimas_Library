@@ -1,41 +1,39 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
 
-class CategoryController extends Controller
+class CategoryController extends Controller 
 {
-    public function index()
+    public function index() 
     {
         $categories = Category::all();
 
         return response()->json([
             'status' => 200,
-            'message' => 'Categories retrived successfully.',
+            'message' => 'Categories retrieved successfully.',
             'data' => $categories
         ], 200);
     }
 
-
-
-    public function store(Request $request)
+    public function store(Request $request) 
     {
-        $request->validate(['name' => 'required|string|max:255']);
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
 
-        $category = Category::create($request->all());
+        $category = Category::create($request->only(['name']));
 
         return response()->json([
             'status' => 201,
-            'message' => 'Categories retrived successfully.',
-            'data' => $categories
+            'message' => 'Category created successfully.',
+            'data' => $category
         ], 201);
     }
 
-
-
-    public function show($id)
+    public function show($id) 
     {
         $category = Category::find($id);
 
@@ -54,9 +52,7 @@ class CategoryController extends Controller
         ], 200);
     }
 
-
-
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) 
     {
         $category = Category::find($id);
 
@@ -68,8 +64,11 @@ class CategoryController extends Controller
             ], 404);
         }
 
-        $request->validate(['name' => 'string|max:255']);
-        $category->update($request->all());
+        $request->validate([
+            'name' => 'string|max:255'
+        ]);
+
+        $category->update($request->only(['name']));
 
         return response()->json([
             'status' => 200,
@@ -78,11 +77,9 @@ class CategoryController extends Controller
         ], 200);
     }
 
-
-
-    public function destroy($id)
+    public function destroy($id) 
     {
-        $category = Category:: find($id);
+        $category = Category::find($id);
 
         if (!$category) {
             return response()->json([
